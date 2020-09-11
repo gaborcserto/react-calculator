@@ -1,0 +1,83 @@
+.App {
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	width: 100%;
+	display: flex;
+
+	.calculator {
+		background: transparent;
+		border-radius: 10px;
+		box-shadow: 0 2rem 4rem rgba(0, 0, 0, .4);
+		height: 450px;
+		overflow: hidden;
+		width: 320px;
+
+		&__display {
+			background: linear-gradient(135deg, #F36265 0%, #961276 100%);
+			color: #fff;
+			padding: 20px;
+
+			&__history {
+				align-items: center;
+				display: flex;
+				height: 30px;
+				justify-content: flex-end;
+				line-height: 30px;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+
+			&__result {
+				align-items: flex-end;
+				display: flex;
+				font-size: 40px;
+				font-weight: 600;
+				height: 60px;
+				justify-content: flex-end;
+				line-height: 60px;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+		}
+
+		&__keypad {
+			background: linear-gradient(135deg, #656d77 0%, #2f363f 100%);
+		}
+
+		&__btn {
+			background: transparent;
+			border: 0;
+			color: #fff;
+			display: inline-block;
+			height: 64px;
+			width: 80px;
+
+			&.btn-0 {
+				width: 160px;
+			}
+
+			&:hover,
+			&:focus {
+				outline: none;
+			}
+		}
+
+		.input-keys {
+			display: inline-block;
+			width: 240px
+		}
+
+		.operator-keys {
+			display: inline-block;
+			width: 80px;
+		}
+
+		.function-keys,
+		.operator-keys {
+			.calculator__btn {
+				color: #999;
+			}
+		}
+	}
+}
