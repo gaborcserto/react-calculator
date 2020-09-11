@@ -54,7 +54,7 @@ function App () {
 			...operation,
 			firstNumber: "",
 			secondNumber: "",
-			window: "",
+			window: operation.result,
 		});
 	};
 
