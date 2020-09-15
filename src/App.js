@@ -119,22 +119,24 @@ function App () {
 	}
 
 	const toggleSign = () => {
+		let number = operation.secondNumber;
+		if (operation.secondNumber !== operation.result) number = `${operation.result}`;
+
 		if (parseFloat(operation.secondNumber) > 0) {
 			setOperation({
 				...operation,
-				secondNumber: `-${operation.secondNumber}`,
-				window: `-${operation.secondNumber}`,
-				result:  parseFloat(operation.secondNumber) * -1
+				secondNumber: `-${number}`,
+				window: `-${number}`,
+				result:  parseFloat(number) * -1
 			});
-
-		} else if (parseFloat(operation.secondNumber) < 0) {
-			const positiveNumber = operation.secondNumber.slice(1);
+		} else if (parseFloat(number) < 0) {
+			const positiveNumber = number.slice(1);
 
 			setOperation({
 				...operation,
 				secondNumber: positiveNumber,
 				window: positiveNumber,
-				result:  parseFloat(operation.secondNumber) * -1
+				result:  parseFloat(number) * -1
 			});
 		}
 	}
