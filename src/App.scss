@@ -46,15 +46,19 @@
 		}
 
 		&__btn {
-			background: transparent;
+			background: rgba(0, 0, 0, .1 );
 			border: 0;
+			box-sizing: border-box;
 			color: #fff;
+			cursor: pointer;
 			display: inline-block;
-			height: 64px;
-			width: 80px;
+			font-size: 20px;
+			height: 62px;
+			margin: 1px;
+			width: 78px;
 
 			&.btn-0 {
-				width: 160px;
+				width: 158px;
 			}
 
 			&:hover,

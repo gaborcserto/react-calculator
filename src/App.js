@@ -1,45 +1,55 @@
 import React, { useState }  from 'react';
-
 import CalculatorKey from './components/CalculatorKey';
 import CalculatorDisplay from './components/CalculatorDisplay';
 import './App.scss';
 
 function App () {
 	const [operation, setOperation] = useState({
-		firstNumber: 0,
-		secondNumber: "",
-		window: "",
-		operator: "+",
+		firstNumber: '0',
+		secondNumber: '',
+		window: '',
+		operator: '+',
 		result: 0
 	});
 
 	const handleNumber = (number) => {
-
 		let firstNumber = parseToNumberValid(operation.firstNumber);
 		let operator = operation.operator;
 		let result = parseToNumberValid(operation.result);
 		let secondNumber = operation.secondNumber + number;
 
 		if (operator === "+") {
-			result = parseFloat(firstNumber) + parseFloat(secondNumber);
+			result = parseFloat(`${firstNumber}`) + parseFloat(secondNumber);
 		} else if (operator === "-") {
-			result = parseFloat(firstNumber) - parseFloat(secondNumber);
+			result = parseFloat(`${firstNumber}`) - parseFloat(secondNumber);
 		} else if (operator === "/") {
-			result = parseFloat(firstNumber) / parseFloat(secondNumber);
+			result = parseFloat(`${firstNumber}`) / parseFloat(secondNumber);
 		} else if (operator === "*") {
-			result = parseFloat(firstNumber) * parseFloat(secondNumber);
+			result = parseFloat(`${firstNumber}`) * parseFloat(secondNumber);
 		}
 
-		setOperation({
-			...operation,
-			window: operation.window + number,
-			result: result,
-			secondNumber: secondNumber,
-		});
+		if (operator === ".") {
+			decimate(number, result, secondNumber)
+		} else {
+			setOperation({
+				...operation,
+				window: operation.window + number,
+				result: result,
+				secondNumber: secondNumber,
+			});
+		}
 	};
 
-	const handleOperators = (operator) => {
+	const parseToNumberValid = (string) => {
+		let number = parseFloat(string);
+		if (isNaN(number)) {
+			return 0;
+		}else{
+			return number;
+		}
+	}
 
+	const handleOperators = (operator) => {
 		setOperation({
 			...operation,
 			window: operation.window + operator,
@@ -69,19 +79,79 @@ function App () {
 		});
 	};
 
-	const parseToNumberValid = (string) => {
-		let number = parseFloat(string);
+	const handleDelete = () => {
+		if(operation.secondNumber.length > 1) {
+			const deletedNumber = operation.secondNumber.slice(0, operation.secondNumber.length - 1);
 
-		if (isNaN(number)) {
-			return 0;
-		}else{
-			return number;
+			setOperation({
+				...operation,
+				secondNumber: deletedNumber,
+				window: deletedNumber,
+				result:  parseFloat(deletedNumber)
+			});
 		}
 	}
 
-	const toggleSign = () => {}
+	const handleDecimal = () => {
+		if (operation.secondNumber === '') {
+			setOperation({
+				...operation,
+				secondNumber: '0.',
+				window: '0.',
+				result:  parseFloat('0.')
+			});
+		} else if (operation.secondNumber !== operation.result && !operation.secondNumber.includes('.')) {
+			setOperation({
+				...operation,
+				secondNumber: `${operation.result}.`,
+				window: `${operation.result}.`,
+				operator: '.',
+				result:  parseFloat(`${operation.result}.`)
+			});
+		} else if(!operation.secondNumber.includes('.')) {
+			setOperation({
+				...operation,
+				secondNumber: `${operation.secondNumber}.`,
+				window: `${operation.secondNumber}.`,
+				result:  parseFloat(`${operation.secondNumber}.`)
+			});
+		}
+	}
 
-	const inputPercent = () => {}
+	const toggleSign = () => {
+		if (parseFloat(operation.secondNumber) > 0) {
+			setOperation({
+				...operation,
+				secondNumber: `-${operation.secondNumber}`,
+				window: `-${operation.secondNumber}`,
+				result:  parseFloat(operation.secondNumber) * -1
+			});
+
+		} else if (parseFloat(operation.secondNumber) < 0) {
+			const positiveNumber = operation.secondNumber.slice(1);
+
+			setOperation({
+				...operation,
+				secondNumber: positiveNumber,
+				window: positiveNumber,
+				result:  parseFloat(operation.secondNumber) * -1
+			});
+		}
+	}
+
+	const decimate = (number, result, secondNumber) => {
+			let newResult = `${result}.${number}`;
+			if(operation.result.toString().includes('.')) newResult = `${result}${number}`;
+
+			setOperation({
+				...operation,
+				window: operation.window + number,
+				result: newResult,
+				secondNumber: secondNumber,
+			});
+	}
+
+	//console.log(operation);
 
 	return (
 		<div className="App">
@@ -92,7 +162,7 @@ function App () {
 						<div className="function-keys">
 							<CalculatorKey btnStyle="calculator__btn btn-clear" onPress={() => handleClear()}>AC</CalculatorKey>
 							<CalculatorKey btnStyle="calculator__btn btn-sign" onPress={() => toggleSign()}>±</CalculatorKey>
-							<CalculatorKey btnStyle="calculator__btn btn-percent" onPress={() => inputPercent()}>%</CalculatorKey>
+							<CalculatorKey btnStyle="calculator__btn btn-del" onPress={() => handleDelete()}>⌫</CalculatorKey>
 						</div>
 						<div className="digit-keys">
 							<CalculatorKey btnStyle="calculator__btn btn-7" onPress={() => handleNumber(7)}>7</CalculatorKey>
@@ -105,7 +175,7 @@ function App () {
 							<CalculatorKey btnStyle="calculator__btn btn-2" onPress={() => handleNumber(2)}>2</CalculatorKey>
 							<CalculatorKey btnStyle="calculator__btn btn-3" onPress={() => handleNumber(3)}>3</CalculatorKey>
 							<CalculatorKey btnStyle="calculator__btn btn-0" onPress={() => handleNumber(0)}>0</CalculatorKey>
-							<CalculatorKey btnStyle="calculator__btn btn-dot" onPress={() => handleNumber('.')}>●</CalculatorKey>
+							<CalculatorKey btnStyle="calculator__btn btn-dot" onPress={() => handleDecimal()}>●</CalculatorKey>
 						</div>
 					</div>
 					<div className="operator-keys">
