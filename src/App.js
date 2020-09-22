@@ -19,14 +19,15 @@ function App () {
 		let secondNumber = operation.secondNumber + number;
 
 		if (operator === "+") {
-			result = parseFloat(`${firstNumber}`) + parseFloat(secondNumber);
+			result = Math.round((parseFloat(`${firstNumber}`) + parseFloat(secondNumber)) * 100) / 100;
 		} else if (operator === "-") {
-			result = parseFloat(`${firstNumber}`) - parseFloat(secondNumber);
+			result = Math.round((parseFloat(`${firstNumber}`) - parseFloat(secondNumber)) * 1000) / 1000;
 		} else if (operator === "/") {
-			result = parseFloat(`${firstNumber}`) / parseFloat(secondNumber);
+			result = Math.round((parseFloat(`${firstNumber}`) / parseFloat(secondNumber)) * 1000) / 1000;
 		} else if (operator === "*") {
-			result = parseFloat(`${firstNumber}`) * parseFloat(secondNumber);
+			result = Math.round((parseFloat(`${firstNumber}`) * parseFloat(secondNumber)) * 1000) / 1000;
 		}
+
 
 		if (operator === ".") {
 			decimate(number, result, secondNumber)
@@ -143,7 +144,10 @@ function App () {
 
 	const decimate = (number, result, secondNumber) => {
 			let newResult = `${result}.${number}`;
-			if(operation.result.toString().includes('.')) newResult = `${result}${number}`;
+			if(operation.result.toString().includes('.')) {
+				newResult = `${result}${number}`;
+				console.log('kl');
+			}
 
 			setOperation({
 				...operation,
