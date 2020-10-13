@@ -13,6 +13,8 @@ function App () {
 	});
 
 	const handleNumber = (number) => {
+		if(number === '.' &&  operation.secondNumber.includes('.')) number = '';
+
 		let firstNumber = parseToNumberValid(operation.firstNumber);
 		let operator = operation.operator;
 		let result = parseToNumberValid(operation.result);
@@ -28,17 +30,12 @@ function App () {
 			result = Math.round((parseFloat(`${firstNumber}`) * parseFloat(secondNumber)) * 1000) / 1000;
 		}
 
-
-		if (operator === ".") {
-			decimate(number, result, secondNumber)
-		} else {
-			setOperation({
-				...operation,
-				window: operation.window + number,
-				result: result,
-				secondNumber: secondNumber,
-			});
-		}
+		setOperation({
+			...operation,
+			window: operation.window + number,
+			result: result,
+			secondNumber: secondNumber,
+		});
 	};
 
 	const parseToNumberValid = (string) => {
@@ -93,32 +90,6 @@ function App () {
 		}
 	}
 
-	const handleDecimal = () => {
-		if (operation.secondNumber === '') {
-			setOperation({
-				...operation,
-				secondNumber: '0.',
-				window: '0.',
-				result:  parseFloat('0.')
-			});
-		} else if (operation.secondNumber !== operation.result && !operation.secondNumber.includes('.')) {
-			setOperation({
-				...operation,
-				secondNumber: `${operation.result}.`,
-				window: `${operation.result}.`,
-				operator: '.',
-				result:  parseFloat(`${operation.result}.`)
-			});
-		} else if(!operation.secondNumber.includes('.')) {
-			setOperation({
-				...operation,
-				secondNumber: `${operation.secondNumber}.`,
-				window: `${operation.secondNumber}.`,
-				result:  parseFloat(`${operation.secondNumber}.`)
-			});
-		}
-	}
-
 	const toggleSign = () => {
 		let number = operation.secondNumber;
 		if (operation.secondNumber !== operation.result) number = `${operation.result}`;
@@ -140,21 +111,6 @@ function App () {
 				result:  parseFloat(number) * -1
 			});
 		}
-	}
-
-	const decimate = (number, result, secondNumber) => {
-			let newResult = `${result}.${number}`;
-			if(operation.result.toString().includes('.')) {
-				newResult = `${result}${number}`;
-				console.log('kl');
-			}
-
-			setOperation({
-				...operation,
-				window: operation.window + number,
-				result: newResult,
-				secondNumber: secondNumber,
-			});
 	}
 
 	//console.log(operation);
@@ -181,7 +137,7 @@ function App () {
 							<CalculatorKey btnStyle="calculator__btn btn-2" onPress={() => handleNumber(2)}>2</CalculatorKey>
 							<CalculatorKey btnStyle="calculator__btn btn-3" onPress={() => handleNumber(3)}>3</CalculatorKey>
 							<CalculatorKey btnStyle="calculator__btn btn-0" onPress={() => handleNumber(0)}>0</CalculatorKey>
-							<CalculatorKey btnStyle="calculator__btn btn-dot" onPress={() => handleDecimal()}>●</CalculatorKey>
+							<CalculatorKey btnStyle="calculator__btn btn-dot" onPress={() => handleNumber('.')}>●</CalculatorKey>
 						</div>
 					</div>
 					<div className="operator-keys">
